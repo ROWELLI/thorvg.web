@@ -1,6 +1,6 @@
 'use client'
 import { Listbox, ListboxOption, ListboxOptions, Transition } from '@headlessui/react';
-import { Fragment, useEffect, useState } from 'react';
+import { Fragment, useEffect, useState, useRef } from 'react';
 import { CheckIcon, ChevronUpDownIcon } from '@heroicons/react/20/solid';
 import { DotLottieReact, setWasmUrl as setDotLottieWasmUrl } from '@lottiefiles/dotlottie-react';
 import { Player } from '@lottiefiles/react-lottie-player';
@@ -149,7 +149,8 @@ function setQueryStringParameter(name: string, value: any) {
 }
 
 export default function Home() {
-  const size = isMobile ? { width: 150, height: 150 } : { width: 180, height: 180};
+  const sliderRef = useRef<HTMLInputElement>(null);
+  const [size, setSize] = useState(isMobile ? { width: 150, height: 150 } : { width: 180, height: 180 });
   let initialized = false;
   
   const [count, setCount] = useState(countOptions[1]);
@@ -205,6 +206,22 @@ export default function Home() {
       loadAnimationByCount(count);
     }, 500);
   }, []);
+
+  useEffect(() => {
+    const slider = sliderRef.current;
+    if (slider) {
+      const min = +slider.min;
+      const max = +slider.max;
+      const value = +slider.value;
+      const percent = ((value - min) / (max - min)) * 100;
+
+      slider.style.background = `linear-gradient(to right, #00deb5 0%, #00deb5 ${percent}%, #444 ${percent}%, #444 100%)`;
+    }
+  }, [size.width]);
+
+  const handleSliderChange = (value: number) => {
+    setSize({ width: value, height: value });
+  };
 
   const loadCanvasKit = async () => {
     const canvasKit = await InitCanvasKit({
@@ -414,6 +431,18 @@ export default function Home() {
               >
                 Set
               </button>
+              <div className="text-white w-full max-w-md">
+                <label className="block mb-2">Box Size: {size.width}px</label>
+                <input
+                  type="range"
+                  ref={sliderRef}
+                  min={50}
+                  max={180}
+                  value={size.width}
+                  onChange={(e) => handleSliderChange(Number(e.target.value))}
+                  className="slider"
+                />
+              </div>
           </div>
 
           <div className="mt-6 flex w-full gap-x-4">
