@@ -31,7 +31,7 @@ import { THORVG_VERSION } from './version';
 type LottieJson = Map<PropertyKey, any>;
 type TvgModule = any;
 
-const _wasmUrl = 'https://unpkg.com/@thorvg/lottie-player@latest/dist/thorvg-wasm.wasm';
+const _wasmUrl = "/dist/thorvg-wasm.wasm";
 let _module: any;
 let _moduleRequested: boolean = false;
 
