@@ -150,13 +150,7 @@ function setQueryStringParameter(name: string, value: any) {
 
 export default function Home() {
   const [size, setSize] = useState(isMobile ? { width: 150, height: 150 } : { width: 180, height: 180 });
-
-  const minSize = 50;
-  const maxSize = 180;
-  const percent = ((size.width - minSize) / (maxSize - minSize)) * 100;
-  const sliderStyle = {
-      background: `linear-gradient(to right, #00deb5 0%, #00deb5 ${percent}%, #444 ${percent}%, #444 100%)`,
-  };
+  const percent = ((size.width - 50) / (180 - 50)) * 100;
   
   let initialized = false;
   
@@ -430,12 +424,14 @@ export default function Home() {
                 <label className="block mb-2">Box Size: {size.width}px</label>
                 <input
                   type="range"
-                  min={minSize}
-                  max={maxSize}
+                  min={50}
+                  max={180}
                   value={size.width}
                   onChange={(e) => handleSliderChange(Number(e.target.value))}
                   className="slider"
-                  style={sliderStyle}
+                  style={{
+                    background: `linear-gradient(to right, #00deb5 0%, #00deb5 ${percent}%, #444 ${percent}%, #444 100%)`,
+                  }}
                 />
               </div>
           </div>
